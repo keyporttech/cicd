@@ -6,7 +6,7 @@ steps:
 - name: "docker build helm-builder"
   image: docker
   commands:
-  - "docker build helm/builder"
+  - "docker build helm-builder"
 
 - name: "github release and dockerhub publish helm-builder"
   environment:
