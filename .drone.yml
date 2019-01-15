@@ -6,7 +6,7 @@ steps:
 - name: "docker build helm-builder"
   image: docker
   commands:
-  - "docker build helm-builder"
+  - "docker build ./docker/helm-builder"
 
 - name: "github release and dockerhub publish helm-builder"
   environment:
@@ -17,10 +17,10 @@ steps:
       from_secret: PASSWORD
   image: docker
   commands:
-  - "docker build ./helm-builder/ -t $DOCKER_TAG"
+  - "docker build ./docker/helm-builder/ -t $DOCKER_TAG"
   - "newVersion=$(./version.sh)"
   - "docker login"
-  - "docker build helm-builder -t ${DOCKER_TAG}:${newVersion}"
+  - "docker build ./docker/helm-builder -t ${DOCKER_TAG}:${newVersion}"
   - "docker push ${DOCKER_TAG}:${newVersion}"
   - "git tag ${newVersion}"
   - "git push origin ${newVersion}"
