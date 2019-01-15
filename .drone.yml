@@ -1,5 +1,5 @@
 kind: pipeline
-name: docker image builder
+name: cicd-image
 
 steps:
 
