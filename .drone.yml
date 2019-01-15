@@ -20,7 +20,7 @@ steps:
   - "docker build ./helm-builder/ -t $DOCKER_TAG"
   - "newVersion=$(./version.sh)"
   - "docker login"
-  - "docker build helm-builder -t ${DOCKER_TAG}:${newVersion}""
+  - "docker build helm-builder -t ${DOCKER_TAG}:${newVersion}"
   - "docker push ${DOCKER_TAG}:${newVersion}"
   - "git tag ${newVersion}"
   - "git push origin ${newVersion}"
