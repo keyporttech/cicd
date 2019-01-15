@@ -5,19 +5,20 @@ steps:
 
 - name: "docker build helm-builder"
   image: docker
+  commands:
+  - "docker build helm/builder"
+
+- name: "github release and dockerhub publish helm-builder"
   environment:
     DOCKER_TAG: keyporttech/helm-builder
     DOCKERHUB_USERNAME:
-      from_secret: username
+      from_secret: USERNAME
     DOCKERHUB_PASSWORD:
-      from_secret: password
-  commands:
-  - "docker build helm/builder"
-- name: "github release and dockerhub publish helm-builder"
+      from_secret: PASSWORD
   image: docker
   commands:
-  - "docker build helm-builder -t $DOCKER_TAG"
-  - "newVersion=$(./version.sh)""
+  - "docker build ./helm-builder/ -t $DOCKER_TAG"
+  - "newVersion=$(./version.sh)"
   - "docker login"
   - "docker build helm-builder -t ${DOCKER_TAG}:${newVersion}""
   - "docker push ${DOCKER_TAG}:${newVersion}"
