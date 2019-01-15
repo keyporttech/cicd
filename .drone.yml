@@ -1,0 +1,28 @@
+kind: pipeline
+name: docker image builder
+
+steps:
+
+- name: "docker build helm-builder"
+  image: docker
+  environment:
+    DOCKER_TAG: keyporttech/helm-builder
+    DOCKERHUB_USERNAME:
+      from_secret: username
+    DOCKERHUB_PASSWORD:
+      from_secret: password
+  commands:
+  - "docker build helm/builder"
+- name: "github release and dockerhub publish helm-builder"
+  image: docker
+  commands:
+  - "docker build helm-builder -t $DOCKER_TAG"
+  - newVersion=$(./version.sh)
+  - "docker login"
+  - docker build helm-builder -t ${DOCKER_TAG}:${newVersion}
+  - "docker push ${DOCKER_TAG}:${newVersion}"
+  - "git tag ${newVersion}"
+  - "git push origin ${newVersion}"
+  when:
+    branch:
+    - master

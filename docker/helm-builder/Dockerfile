@@ -10,12 +10,14 @@ RUN apt-get update -qq && apt-get install -qqy \
     bash \
     curl \
     git \
+    hub \
     make \
     dnsutils \
     lsb-release \
     wget \
     gnupg2 \
     html-xml-utils \
+    socat \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Google Cloud SDK and kubectl
