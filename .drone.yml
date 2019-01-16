@@ -1,11 +1,6 @@
 kind: pipeline
 name: cicd-image
 
-services:
-- name: docker
-  image: docker:dind
-  privileged: true
-
 steps:
 - name: "docker build helm-builder"
   image: docker
@@ -31,3 +26,8 @@ steps:
   when:
     branch:
     - master
+
+services:
+- name: docker
+  image: docker:dind
+  privileged: true
