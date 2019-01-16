@@ -1,13 +1,14 @@
 kind: pipeline
 name: cicd-image
 
-steps:
+services:
+- name: docker
+  image: docker:dind
+  privileged: true
 
+steps:
 - name: "docker build helm-builder"
   image: docker
-  volumes:
-  - name: dockersock
-    path: /var/run/docker.sock
   commands:
   - "docker build ./docker/helm-builder"
 
@@ -19,9 +20,6 @@ steps:
     DOCKERHUB_PASSWORD:
       from_secret: PASSWORD
   image: docker
-  volumes:
-  - name: dockersock
-    path: /var/run/docker.sock
   commands:
   - "docker build ./docker/helm-builder/ -t $DOCKER_TAG"
   - "newVersion=$(./version.sh)"
@@ -33,8 +31,3 @@ steps:
   when:
     branch:
     - master
-
-volumes:
-- name: dockersock
-  host:
-    path: /var/run/docker.sock
