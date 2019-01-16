@@ -8,8 +8,8 @@ steps:
   - name: dockersock
     path: /var/run/
   commands:
-  - "helm_release_url=https://github.com/helm/helm/releases/latest"
-  - "LATEST_HELM_RELEASE=$(curl -SsL $helm_release_url | awk '/\/tag\//' | grep -v no-underline | head -n 1 | cut -d '\\"' -f 2 | awk '{n=split($NF,a,\\"/\\");print a[n]}' | awk 'a !~ $0{print}; {a=$0}')"
+#  - "helm_release_url=https://github.com/helm/helm/releases/latest"
+  - "LATEST_HELM_RELEASE=$(curl -SsL $helm_release_url | awk '/\/tag\//' | grep -v no-underline | head -n 1 | cut -d '\"' -f 2 | awk '{n=split($NF,a,\"/\");print a[n]}' | awk 'a !~ $0{print}; {a=$0}')"
   - "docker build --build-arg HELM_VERSION=${LATEST_HELM_RELEASE} ./docker/helm-builder"
 
 - name: "github release and dockerhub publish helm-builder"
