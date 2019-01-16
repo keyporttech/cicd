@@ -4,6 +4,9 @@ name: cicd-image
 steps:
 - name: "docker build helm-builder"
   image: docker
+  volumes:
+  - name: dockersock
+    path: /var/run/docker.sock
   commands:
   - "docker build ./docker/helm-builder"
 
@@ -31,3 +34,10 @@ services:
 - name: docker
   image: docker:dind
   privileged: true
+  volumes:
+  - name: dockersock
+    path: /var/run/docker.sock
+
+volumes:
+- name: dockersock
+  temp: {}
