@@ -9,12 +9,12 @@ steps:
     path: /var/run/
   commands:
   - "LATEST_KUBERNETES_RELEASE=$(curl -sSL https://dl.k8s.io/release/stable.txt)"
-  - "LATEST_HELM_RELEASE=$(./latestHelmVersion)"
-  - "docker build --build-arg HELM_VERSION=${LATEST_HELM_RELEASE} KUBERNETES_VERSION=${LATEST_KUBERNETES_RELEASE} ./docker/helm-builder"
+  - "LATEST_HELM_RELEASE=$(./latestHelmVersion.sh)"
+  - "docker build --build-arg HELM_VERSION=${LATEST_HELM_RELEASE} --build-arg KUBERNETES_VERSION=${LATEST_KUBERNETES_RELEASE} ./docker/helm-builder"
 
 - name: "github release and dockerhub publish helm-builder"
   environment:
-    DOCKER_TAG: keyporttech/helm-builder
+    DOCKER_TAG: keyporttech/helm-builder:2.12-2
     DOCKERHUB_USERNAME:
       from_secret: USERNAME
     DOCKERHUB_PASSWORD:
