@@ -2,6 +2,16 @@ kind: pipeline
 name: cicd-image
 
 steps:
+
+- name: start docker
+  image: docker:dind
+  detach: true
+  privileged: true
+  volumes:
+  - name: dockersock
+    path: /var/run/
+
+
 - name: "docker build helm-builder"
   image: docker
   volumes:
@@ -31,14 +41,6 @@ steps:
   when:
     branch:
     - master
-
-services:
-- name: docker
-  image: docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run/
 
 volumes:
 - name: dockersock
