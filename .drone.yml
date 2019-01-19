@@ -8,9 +8,9 @@ steps:
   - name: dockersock
     path: /var/run/
   commands:
-  - "helm_release_url=https://github.com/helm/helm/releases/latest"
-  - "LATEST_HELM_RELEASE=$(curl -SsL $helm_release_url )"
-  - "docker build --build-arg HELM_VERSION=${LATEST_HELM_RELEASE} ./docker/helm-builder"
+  - "LATEST_KUBERNETES_RELEASE=$(curl -sSL https://dl.k8s.io/release/stable.txt)"
+  - "LATEST_HELM_RELEASE=$(./latestHelmVersion)"
+  - "docker build --build-arg HELM_VERSION=${LATEST_HELM_RELEASE} KUBERNETES_VERSION=${LATEST_KUBERNETES_RELEASE} ./docker/helm-builder"
 
 - name: "github release and dockerhub publish helm-builder"
   environment:
