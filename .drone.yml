@@ -14,7 +14,7 @@ steps:
 
 - name: "github release and dockerhub publish helm-builder"
   environment:
-    DOCKER_TAG: keyporttech/helm-builder:2.12-2
+    DOCKER_TAG: keyporttech/helm-builder:2.12-3
     DOCKERHUB_USERNAME:
       from_secret: USERNAME
     DOCKERHUB_PASSWORD:
