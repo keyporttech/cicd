@@ -13,7 +13,7 @@ steps:
 
 
 - name: "docker build helm-builder"
-  image: docker
+  image: keyporttech/helm-builder:2.12-3
   volumes:
   - name: dockersock
     path: /var/run/
