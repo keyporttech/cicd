@@ -1,5 +1,5 @@
 kind: pipeline
-name: cicd-image
+name: "helm-builder docker cicd"
 
 steps:
 
@@ -27,7 +27,7 @@ steps:
 
 - name: "github release and dockerhub publish helm-builder"
   environment:
-    DOCKER_TAG: keyporttech/helm-builder:2.12-3
+    DOCKER_TAG: keyporttech/helm-builder
     DOCKERHUB_USERNAME:
       from_secret: USERNAME
     DOCKERHUB_PASSWORD:
@@ -37,8 +37,8 @@ steps:
   - name: dockersock
     path: /var/run/
   commands:
-  - "docker build ./docker/helm-builder/ -t $DOCKER_TAG"
   - "newVersion=$(./version.sh)"
+  - "docker build ./docker/helm-builder/ -t $DOCKER_TAG:$(./version.sh)"
   - "docker login"
   - "docker build ./docker/helm-builder -t ${DOCKER_TAG}:${newVersion}"
   - "docker push ${DOCKER_TAG}:${newVersion}"
