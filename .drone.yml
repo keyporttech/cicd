@@ -17,9 +17,13 @@ steps:
   - name: dockersock
     path: /var/run/
   commands:
-  - "LATEST_KUBERNETES_RELEASE=$(curl -sSL https://dl.k8s.io/release/stable.txt)"
-  - "LATEST_HELM_RELEASE=$(./latestHelmVersion.sh)"
+  - "export LATEST_KUBERNETES_RELEASE=$(curl -sSL https://dl.k8s.io/release/stable.txt)"
+  - "export LATEST_HELM_RELEASE=$(./latestHelmVersion.sh)"
   - "docker build --build-arg HELM_VERSION=${LATEST_HELM_RELEASE} --build-arg KUBERNETES_VERSION=${LATEST_KUBERNETES_RELEASE} ./docker/helm-builder"
+  when:
+  event:
+    include:
+    - pull_request
 
 - name: "github release and dockerhub publish helm-builder"
   environment:
@@ -29,6 +33,9 @@ steps:
     DOCKERHUB_PASSWORD:
       from_secret: PASSWORD
   image: docker
+  volumes:
+  - name: dockersock
+    path: /var/run/
   commands:
   - "docker build ./docker/helm-builder/ -t $DOCKER_TAG"
   - "newVersion=$(./version.sh)"
@@ -38,6 +45,12 @@ steps:
   - "git tag ${newVersion}"
   - "git push origin ${newVersion}"
   when:
+    when:
+    event:
+      include:
+      - push
+      exclude:
+      - pull_request
     branch:
     - master
 
