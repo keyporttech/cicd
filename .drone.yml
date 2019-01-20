@@ -1,5 +1,5 @@
 kind: pipeline
-name: "helm-builder docker cicd"
+name: "helm-builder-docker"
 
 steps:
 
