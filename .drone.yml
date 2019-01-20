@@ -19,7 +19,7 @@ steps:
   commands:
   - "export LATEST_KUBERNETES_RELEASE=$(curl -sSL https://dl.k8s.io/release/stable.txt)"
   - "export LATEST_HELM_RELEASE=$(./latestHelmVersion.sh)"
-  - "docker build --build-arg HELM_VERSION=${LATEST_HELM_RELEASE} --build-arg KUBERNETES_VERSION=${LATEST_KUBERNETES_RELEASE} ./docker/helm-builder"
+  - "docker build --build-arg HELM_VERSION=$(./latestHelmVersion.sh) --build-arg KUBERNETES_VERSION=$(curl -sSL https://dl.k8s.io/release/stable.txt) ./docker/helm-builder"
   when:
   event:
     include:
