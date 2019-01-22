@@ -49,7 +49,7 @@ steps:
   - "echo $GITHUB_KEY | base64 --decode > id_rsa"
   - 'git config --global user.email "github@keyporttech.com"'
   - 'git config --global user.name "keyporttech-bot"'
-  - 'git add *''
+  - 'git add *'
   - 'GIT_SSH_COMMAND="ssh -i ./id_rsa" git push origin master'
   when:
     when:
