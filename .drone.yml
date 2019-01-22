@@ -24,26 +24,33 @@ steps:
   event:
     include:
     - pull_request
+    exclude:
+    - push
 
-- name: "github release and dockerhub publish helm-builder"
+- name: "auto github release and dockerhub publish helm-builder"
   environment:
-    DOCKER_TAG: keyporttech/helm-builder
+    DOCKER_IMAGE: keyporttech/helm-builder
+    CURRENT_HELM_RELEASE: 2.12.1
+    CURRENT_DOCKER_TAG: 2.12.1-3
     DOCKERHUB_USERNAME:
       from_secret: USERNAME
     DOCKERHUB_PASSWORD:
       from_secret: PASSWORD
+    GITHUB_TOKEN:
+      from secret: GITHUBTOKEN
+    GITHUB_KEY:
+      from secret: GITHUBSSHKEY64
   image: docker
   volumes:
   - name: dockersock
     path: /var/run/
   commands:
-  - "newVersion=$(./version.sh)"
-  - "docker build ./docker/helm-builder/ -t $DOCKER_TAG:$(./version.sh)"
-  - "docker login"
-  - "docker build ./docker/helm-builder -t ${DOCKER_TAG}:${newVersion}"
-  - "docker push ${DOCKER_TAG}:${newVersion}"
-  - "git tag ${newVersion}"
-  - "git push origin ${newVersion}"
+  - "newVersion=$(./release-publish.sh)"
+  - "echo $GITHUB_KEY | base64 --decode > id_rsa"
+  - "git config --global user.email "github@keyporttech.com"
+  - "git config --global user.name "keyporttech-bot"
+  - "git add *"
+  - "GIT_SSH_COMMAND='ssh -i ./id_rsa' git push origin master"
   when:
     when:
     event:
