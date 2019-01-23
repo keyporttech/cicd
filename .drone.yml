@@ -2,7 +2,6 @@ kind: pipeline
 name: "helm-builder-docker"
 
 steps:
-
 - name: start docker
   image: docker:dind
   detach: true
@@ -10,12 +9,16 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/
+  - name: dockerlib
+    path: /var/lib/docker
 
 - name: "docker build helm-builder"
   image: keyporttech/helm-builder:2.12.2
   volumes:
   - name: dockersock
     path: /var/run/
+  - name: dockerlib
+    path: /var/lib/docker
   commands:
   - "export LATEST_KUBERNETES_RELEASE=$(curl -sSL https://dl.k8s.io/release/stable.txt)"
   - "export LATEST_HELM_RELEASE=$(./latestHelmVersion.sh)"
@@ -44,15 +47,20 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/
+  - name: dockerlib
+    path: /var/lib/docker
   commands:
   - "./release-publish.sh"
   - "echo $GITHUB_KEY | base64 -d > /var/run/id_rsa"
   - "chmod 600 /var/run/id_rsa"
+  - "echo $GITHUB_KEY"
   - "cat /var/run/id_rsa"
   - 'git config --global user.email "github@keyporttech.com"'
   - 'git config --global user.name "keyporttech-bot"'
   - 'git add *'
-  - git remote add upstream $DRONE_GIT_SSH_URL
+  - 'git commit -m "RELEASE"'
+  - 'git remote add upstream $DRONE_GIT_SSH_URL'
+  - 'echo $DRONE_GIT_SSH_URL'
   - 'GIT_SSH_COMMAND="ssh -i /var/run/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git push --set-upstream upstream $DRONE_BRANCH'
   when:
     event:
@@ -65,4 +73,6 @@ steps:
 
 volumes:
 - name: dockersock
+  temp: {}
+- name: dockerlib
   temp: {}

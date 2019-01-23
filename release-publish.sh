@@ -19,7 +19,7 @@ rm drone.yml .drone_old.yml
 
 #Publish to docker
 docker build docker/helm-builder --build-arg HELM_VERSION=$LATEST_HELM_RELEASE -t $DOCKER_IMAGE:$NEW_RELEASE_TAG
-echo $PASSWORD | docker login --username $USERNAME --password-stdin
+echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
 docker push $DOCKER_IMAGE:$NEW_RELEASE_TAG
 
 cat <<EOF > release-notes.txt
