@@ -50,7 +50,8 @@ steps:
   - 'git config --global user.email "github@keyporttech.com"'
   - 'git config --global user.name "keyporttech-bot"'
   - 'git add *'
-  - 'GIT_SSH_COMMAND="ssh -i ./id_rsa" git push --set-upstream origin $DRONE_BRANCH'
+  - git remote add upstream $DRONE_GIT_SSH_URL
+  - 'GIT_SSH_COMMAND="ssh -i ./id_rsa" git push --set-upstream upstream $DRONE_BRANCH'
   when:
     event:
       include:
