@@ -1,6 +1,8 @@
 #!//bin/sh
 
+#check for a new version of helm - if not then increment current tag
 LATEST_HELM_RELEASE=$(./latestHelmVersion.sh)
+echo "lastest helm release: $LATEST_HELM_RELEASE"
 NEW_RELEASE_TAG=$LATEST_HELM_RELEASE
 if [ "$LATEST_HELM_RELEASE" = "$CURRENT_HELM_RELEASE" ]; then
   increment=$(echo $CURRENT_DOCKER_TAG | sed  's/\([0-9]*\.[0-9]*.[0-9]*\).-//g')
@@ -9,13 +11,14 @@ if [ "$LATEST_HELM_RELEASE" = "$CURRENT_HELM_RELEASE" ]; then
   NEW_RELEASE_TAG="${NEW_RELEASE_TAG}-${increment}"
 fi
 
-# replace tag in drone.yaml
+# update tags in drone.yaml
 sed "s/$CURRENT_HELM_RELEASE/$LATEST_HELM_RELEASE/g" <.drone.yml > drone.yml
 mv .drone.yml .drone_old.yml
 sed "s/"CURRENT_DOCKER_TAG:\ .*/CURRENT_DOCKER_TAG:\ "$NEW_RELEASE_TAG"/g  < drone.yml > .drone.yml
 rm drone.yml .drone_old.yml
 
-docker build docker/helm-builder -t $DOCKER_IMAGE:$NEW_RELEASE_TAG
+#Publish to docker
+docker build docker/helm-builder --build-arg HELM_VERSION=$LATEST_HELM_RELEASE -t $DOCKER_IMAGE:$NEW_RELEASE_TAG
 echo $PASSWORD | docker login --username $USERNAME --password-stdin
 docker push $DOCKER_IMAGE:$NEW_RELEASE_TAG
 
