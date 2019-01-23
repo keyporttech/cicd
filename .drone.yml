@@ -21,15 +21,15 @@ steps:
   - "export LATEST_HELM_RELEASE=$(./latestHelmVersion.sh)"
   - "docker build --build-arg HELM_VERSION=$(./latestHelmVersion.sh) --build-arg KUBERNETES_VERSION=$(curl -sSL https://dl.k8s.io/release/stable.txt) ./docker/helm-builder"
   when:
-  event:
-    include:
-    - pull_request
-    exclude:
-    - push
+    event:
+      include:
+      - pull_request
+      exclude:
+      - push
 
 - name: "auto github release and dockerhub publish helm-builder"
   environment:
-    DOCKER_IMAGE: keyporttech/helm-builder
+    DOCKER_IMAGE: keyporttech/helm-builder:2.12.1-3
     CURRENT_HELM_RELEASE: 2.12.1
     CURRENT_DOCKER_TAG: 2.12.1-3
     DOCKERHUB_USERNAME:
@@ -52,7 +52,6 @@ steps:
   - 'git add *'
   - 'GIT_SSH_COMMAND="ssh -i ./id_rsa" git push origin master'
   when:
-    when:
     event:
       include:
       - push
