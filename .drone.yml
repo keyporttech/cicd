@@ -12,7 +12,7 @@ steps:
     path: /var/run/
 
 - name: "docker build helm-builder"
-  image: keyporttech/helm-builder:2.12-3
+  image: keyporttech/helm-builder:2.12.2
   volumes:
   - name: dockersock
     path: /var/run/
@@ -29,7 +29,7 @@ steps:
 
 - name: "auto github release and dockerhub publish helm-builder"
   environment:
-    DOCKER_IMAGE: keyporttech/helm-builder:2.12.1-3
+    DOCKER_IMAGE: keyporttech/helm-builder:2.12.2
     CURRENT_HELM_RELEASE: 2.12.1
     CURRENT_DOCKER_TAG: 2.12.1-3
     DOCKERHUB_USERNAME:
@@ -45,7 +45,7 @@ steps:
   - name: dockersock
     path: /var/run/
   commands:
-  - "./release-publish.sh"
+  - "bash -x ./release-publish.sh"
   - "echo $GITHUB_KEY | base64 -d > id_rsa"
   - 'git config --global user.email "github@keyporttech.com"'
   - 'git config --global user.name "keyporttech-bot"'
