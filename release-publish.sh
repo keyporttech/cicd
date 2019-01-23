@@ -16,7 +16,7 @@ sed "s/"CURRENT_DOCKER_TAG:\ .*/CURRENT_DOCKER_TAG:\ "$NEW_RELEASE_TAG"/g  < dro
 rm drone.yml .drone_old.yml
 
 docker build docker/helm-builder -t $DOCKER_IMAGE:$NEW_RELEASE_TAG
-docker login --username=$USERNAME --password=$PASSWORD
+echo $PASSWORD | docker login --username $USERNAME --password-stdin
 docker push $DOCKER_IMAGE:$NEW_RELEASE_TAG
 
 cat <<EOF > release-notes.txt
