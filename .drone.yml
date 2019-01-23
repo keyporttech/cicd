@@ -46,12 +46,12 @@ steps:
     path: /var/run/
   commands:
   - "./release-publish.sh"
-  - "echo $GITHUB_KEY | base64 -d > id_rsa"
+  - "echo $GITHUB_KEY | base64 -d > /var/run/id_rsa"
   - 'git config --global user.email "github@keyporttech.com"'
   - 'git config --global user.name "keyporttech-bot"'
   - 'git add *'
   - git remote add upstream $DRONE_GIT_SSH_URL
-  - 'GIT_SSH_COMMAND="ssh -i ./id_rsa" git push --set-upstream upstream $DRONE_BRANCH'
+  - 'GIT_SSH_COMMAND="ssh -i /var/run/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git push --set-upstream upstream $DRONE_BRANCH'
   when:
     event:
       include:
