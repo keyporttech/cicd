@@ -47,6 +47,7 @@ steps:
   commands:
   - "./release-publish.sh"
   - "echo $GITHUB_KEY | base64 -d > /var/run/id_rsa"
+  - "chmod 600 /var/run/id_rsa"
   - 'git config --global user.email "github@keyporttech.com"'
   - 'git config --global user.name "keyporttech-bot"'
   - 'git add *'
