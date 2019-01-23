@@ -1,10 +1,7 @@
 FROM ubuntu
 
 ARG HELM_VERSION
-
-ENV KUBERNETES_VERSION=v1.13.0 \
-  HELM_VERSION=v2.12.1 \
-  DOCKER_API_VERSION=1.38
+ARG KUBERNETES_VERSION
 
 RUN  apt-get update -qq && apt-get install -qqy \
     software-properties-common \
