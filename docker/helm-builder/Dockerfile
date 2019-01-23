@@ -30,10 +30,10 @@ RUN export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" \
     && apt-get update && apt-get install -y -q google-cloud-sdk kubectl
 
 # Install helm
-RUN wget http://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz \
-  && tar xzf ./helm-${HELM_VERSION}-linux-amd64.tar.gz \
+RUN wget http://storage.googleapis.com/kubernetes-helm/helm-v$HELM_VERSION-linux-amd64.tar.gz \
+  && tar xzf ./helm-v$HELM_VERSION-linux-amd64.tar.gz \
   && mv linux-amd64/helm /usr/local/bin \
-  && rm -rf helm-${HELM_VERSION}-linux-amd64.tar.gz linux-amd64
+  && rm -rf helm-v$HELM_VERSION-linux-amd64.tar.gz linux-amd64
 
 # Install Docker from Docker Inc. repositories.
 RUN curl -sSL https://get.docker.com/ | sh

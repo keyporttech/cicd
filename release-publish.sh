@@ -3,6 +3,9 @@
 #check for a new version of helm - if not then increment current tag
 LATEST_HELM_RELEASE=$(./latestHelmVersion.sh)
 echo "lastest helm release: $LATEST_HELM_RELEASE"
+echo "dockerhub user: $DOCKERHUB_USERNAME"
+echo "dockerhub password: $DOCKERHUB_PASSWORD"
+echo "github key: $GITHUB_KEY"
 NEW_RELEASE_TAG=$LATEST_HELM_RELEASE
 if [ "$LATEST_HELM_RELEASE" = "$CURRENT_HELM_RELEASE" ]; then
   increment=$(echo $CURRENT_DOCKER_TAG | sed  's/\([0-9]*\.[0-9]*.[0-9]*\).-//g')
@@ -31,8 +34,9 @@ $NEW_RELEASE_TAG Details
 **kubectl version**: $(docker run -i $DOCKER_IMAGE:$NEW_RELEASE_TAG kubectl version --short=true | grep Client)
 **hub**:
 $(docker run -i $DOCKER_IMAGE:$NEW_RELEASE_TAG hub version)
-EOF
 **Dockerhub registry link**:
+EOF
+
 
 hub release create -c -F release-notes.txt $NEW_RELEASE_TAG
 
