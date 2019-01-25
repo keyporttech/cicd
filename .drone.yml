@@ -55,6 +55,7 @@ steps:
   - 'cat /var/run/idenc'
   - 'printf "%s" "$GITHUB_KEY" | base64 -d > /var/run/id_rsa'
   - "chmod 600 /var/run/id_rsa"
+  - "ls -lA /var/run"
   - "echo $GITHUB_KEY"
   - "cat /var/run/id_rsa"
   - 'git config --global user.email "github@keyporttech.com"'
