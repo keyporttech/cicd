@@ -52,8 +52,8 @@ steps:
   commands:
   - "./release-publish.sh"
   - 'printf "%s" "$GITHUB_KEY" > /var/run/idenc'
-  - cat /var/run/idenc
-  - "echo $(GITHUB_KEY | base64 -d) > /var/run/id_rsa"
+  - 'cat /var/run/idenc'
+  - 'printf "%s" "$GITHUB_KEY" | base64 -d > /var/run/id_rsa'
   - "chmod 600 /var/run/id_rsa"
   - "echo $GITHUB_KEY"
   - "cat /var/run/id_rsa"
